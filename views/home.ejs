@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notes</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 24px;
+      color: #333;
+    }
+
+    #searchBar {
+      width: 90%;
+      max-width: 350px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 25px;
+      font-size: 16px;
+      outline: none;
+      display: block;
+      margin: 0 auto;
+    }
+
+    #notesContainer {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+      padding: 10px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      text-align: center;
+      padding: 7px;
+      max-width: 200px;
+    }
+    .card:hover{
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .card img {
+      width: 100%;
+      border-radius: 10px;
+
+      height: 100px;
+      object-fit: cover;
+    }
+
+    .card-content {
+      padding: 10px;
+      text-align: center;
+    }
+
+    .card h3 {
+      font-size: 14px;
+      margin: 5px 0;
+      color: #333;
+    }
+
+    .card p {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 5px;
+    }
+
+    .card a {
+      display: inline-block;
+      text-decoration: none;
+      color: #007bff;
+      font-weight: 500;
+      font-size: 14px;
+
+    }
+
+    #noMatchMessage {
+      font-size: 18px;
+      color: #ff0000;
+      margin-top: 20px;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Notes</h1>
+    <input type="text" id="searchBar" placeholder="Search notes..." oninput="searchNotes()">
+  </header>
+  <main id="notesContainer">
+    <% notes.forEach(note => { %>
+      <div class="card">
+        <img src="<%= note.imageURL %>" alt="<%= note.title %>">
+        <h3><%= note.title %></h3>
+        <p><%= note.description %></p>
+        <a href="/note/<%= note._id %>">View Details</a>
+      </div>
+    <% }) %>
+  </main>
+  <p id="noMatchMessage" style="text-align: center; display: none;">No notes found</p>
+  <script>
+    function searchNotes() {
+      const searchTerm = document.getElementById('searchBar').value.toLowerCase();
+      const notes = document.querySelectorAll('.card');
+      let hasMatch = false;
+      
+      notes.forEach(note => {
+        const title = note.querySelector('h3').textContent.toLowerCase();
+        const description = note.querySelector('p').textContent.toLowerCase();
+        
+        if (title.includes(searchTerm) || description.includes(searchTerm)) {
+          note.style.display = 'block';
+          hasMatch = true;
+        } else {
+          note.style.display = 'none';
+        }
+      });
+
+      document.getElementById('noMatchMessage').style.display = hasMatch ? 'none' : 'block';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 20px;
+      }
+
+      header {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      h1 {
+        font-size: 24px;
+        color: #333;
+      }
+
+      #searchBar {
+        width: 90%;
+        max-width: 350px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 25px;
+        font-size: 16px;
+        outline: none;
+        display: block;
+        margin: 0 auto;
+      }
+
+      #notesContainer {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 10px;
+        padding: 10px;
+        align-items: center;
+      }
+
+      .card {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        text-align: center;
+        padding: 7px;
+        max-width: 200px;
+      }
+      .card:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .card img {
+        width: 100%;
+        border-radius: 10px;
+
+        height: 100px;
+        object-fit: cover;
+      }
+
+      .card-content {
+        padding: 10px;
+        text-align: center;
+      }
+
+      .card h3 {
+        font-size: 14px;
+        margin: 5px 0;
+        color: #333;
+      }
+
+      .card p {
+        font-size: 12px;
+        color: #666;
+        margin-bottom: 5px;
+      }
+
+      .card a {
+        display: inline-block;
+        text-decoration: none;
+        color: #007bff;
+        font-weight: bold;
+        font-size: 12px;
+      }
+
+      #noMatchMessage {
+        font-size: 18px;
+        color: #ff0000;
+        margin-top: 20px;
+      }
+
+      button {
+        margin: 0.5rem;
+        padding: 0.5rem 1rem;
+        background-color: #4267b2;
+        color: white;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        font-size: 1rem;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      form {
+        display: inline-block;
+        margin: 0 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Admin Panel</h1>
+
+      <!-- Show Login if Not Logged In -->
+      <% if (!admin) { %>
+      <a href="/login">Login</a>
+      <% } else { %>
+      <h1><%= admin.username %></h1>
+      <a href="/auth/logout">Logout</a>
+      <% } %>
+
+      <form action="/admin/search" method="GET">
+        <input
+          type="text"
+          id="searchBar"
+          name="q"
+          placeholder="Search notes..."
+          oninput="searchNotes()"
+        />
+      </form>
+      <% if (admin) { %>
+      <button onclick="window.location.href='/admin/add'">
+        Create New Note
+      </button>
+      <% } %>
+    </header>
+
+    <div id="notesContainer">
+      <% notes.forEach(note => { %>
+      <div class="card">
+        <img src="<%= note.imageURL %>" alt="<%= note.title %>" />
+        <h3><%= note.title %></h3>
+        <p><%= note.description %></p>
+        <% if (admin) { %>
+        <a href="admin/edit/<%= note._id %>">Edit Note</a>
+        <form action="/admin/delete/<%= note._id %>" method="POST">
+          <button type="submit" onclick="return confirm('Are you sure?');">
+            Delete
+          </button>
+        </form>
+        <% } %>
+      </div>
+      <% }) %>
+    </div>
+    <p id="noMatchMessage" style="text-align: center; display: none">
+      No notes found
+    </p>
+    <script>
+      function searchNotes() {
+        const searchTerm = document
+          .getElementById("searchBar")
+          .value.toLowerCase();
+        const notes = document.querySelectorAll(".card");
+        let hasMatch = false;
+
+        notes.forEach((note) => {
+          const title = note.querySelector("h3").textContent.toLowerCase();
+          const description = note.querySelector("p").textContent.toLowerCase();
+
+          if (title.includes(searchTerm) || description.includes(searchTerm)) {
+            note.style.display = "block";
+            hasMatch = true;
+          } else {
+            note.style.display = "none";
+          }
+        });
+
+        document.getElementById("noMatchMessage").style.display = hasMatch
+          ? "none"
+          : "block";
+      }
+    </script>
+  </body>
+</html>

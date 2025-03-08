@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= note.title %></title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 20px;
+        text-align: center;
+      }
+
+      .note-detail {
+        max-width: 300px;
+        margin: 0 auto;
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 18px;
+        color: #333;
+        margin-bottom: 10px;
+      }
+
+      .note-detail img {
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+        margin-bottom: 10px;
+      }
+
+      p {
+        font-size: 12px;
+        color: #2a2929;
+        margin-bottom: 10px;
+      }
+
+      button {
+        margin: 0.5rem;
+        padding: 0.5rem 1rem;
+        background-color: #4267b2;
+        color: white;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        font-size: 1rem;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="note-detail">
+      <h1><%= note.title %></h1>
+      <img src="<%= note.imageURL %>" alt="<%= note.title %>" />
+      <p><%= note.description %></p>
+      <button onclick="window.location.href='<%= note.showNotesURL %>'">
+        Show Notes
+      </button>
+      <button onclick="window.location.href='<%= note.downloadURL %>'">
+        Download Notes
+      </button>
+    </div>
+  </body>
+</html>
