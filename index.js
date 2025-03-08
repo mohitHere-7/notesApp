@@ -15,7 +15,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 require('dotenv').config(); // Load environment variables
 
-const url = process.env.MONGODB_URL; //Get URL from .env
+const url = process.env.MONGODB_URL; 
+const port = process.env.PORT || 3000; //Get URL from .env
 
 
 mongoose.connect(url);
@@ -29,6 +30,6 @@ app.use("/auth", authRoutes);
 app.use("/admin", adminRoutes);
 app.use("/", noteRoutes);
 
-app.listen(3000, () => {
+app.listen(port , () => {
   console.log("Server started  ");
 });
